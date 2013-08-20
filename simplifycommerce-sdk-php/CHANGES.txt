@@ -1,0 +1,9 @@
+
+25 June 2013   version 1.0.1
+
+   Fixed error with timestamps on 32 bit machines.
+
+10 June 2013   version 1.0.0
+
+   Initial release
+
