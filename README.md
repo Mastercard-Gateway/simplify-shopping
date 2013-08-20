@@ -34,5 +34,30 @@ $simplifyPublicKey 	= 'YOUR_SIMPLIFY_PUBLIC_API_KEY';	//E.g.: sbpb_M2Y0NTI2MWYtN
 
 If you want to change the merchant information, update the data/MerchantData.php.  Please follow the existing content as an example.  It is quite simple and self explanatory.
 
+```php
+$merchant = new Merchant;
+$merchant->name = 'The Simplify Cake';
+$merchant->header = 'Enjoy our delectable cupcakes.';
+$merchant->description = 'We are a delivery only cupcake business. We specialize in made from scratch gourmet cupcakes. Our goal is to change your cupcake experience forever.';
+$merchant->url = 'index.php'; //'http://whatever_url';
+$merchant->urlDisplay = 'simplifycake.com'; //Only for display purpose
+$merchant->email = 'simplifycake@gmail.com';
+$merchant->mainColor = '#F15E92';
 
+$merchant->products[] = new Product('Mixed Box of Cupcakes', 
+	'You will get one box of mixed cupcakes in the mail. They will arrive in a sealed and chilled bag.', 
+	'assets/img/cupcake1.png', 
+	1000); //$10.00
 
+$merchant->products[] = new Product('Rainbow Cupcake', 
+	'This is for a single box of rainbow cupcakes.', 
+	'assets/img/cupcake2.png', 
+	2000); //$20.00
+
+$merchant->products[] = new Product('One Tiny Cake', 
+	'This is for one piece of our signature cake.', 
+	'assets/img/cupcake3.png', 
+	350); //$3.50
+
+$merchant->shippingToStates = array('AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY');
+```
