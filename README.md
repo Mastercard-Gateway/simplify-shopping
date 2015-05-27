@@ -13,6 +13,8 @@ Features
 * Integrated with SimplifyJS for card tokenization and Simplify Commerce PHP SDK for payment creation
 * Runnable end-to-end demo flow out of the box (without customization)
 * Merchant information and products can be easily customized in PHP
+* Checkout with [Simplify Hosted Payments](https://www.simplify.com/commerce/docs/tools/hosted-payments)
+* Save customer card details
 
 Customization
 -------------
@@ -25,8 +27,8 @@ Copy your keys and change the data/SimplifyKeys.php accordingly.
 
 ```php
 <?php
-$simplifyPrivateKey = 'YOUR_SIMPLIFY_PRIVATE_API_KEY';	//E.g.: EeP6FNN0V/Yvf8gsSrfjv5oE0GyEZNtbDpHMFyQDgCh5YFFQL0ODSXAOkNtXTToq 
-$simplifyPublicKey 	= 'YOUR_SIMPLIFY_PUBLIC_API_KEY';	//E.g.: sbpb_M2Y0NTI2MWYtNjk2OS00OGExLThlMWYtNGMyODcyMGQ1ODky
+$simplifyPrivateKey = 'YOUR_SIMPLIFY_PRIVATE_API_KEY';	//E.g.: DvO+9QRpinM6iBQI/OFxpbId/kYi9pCQ4petiZHZiCJ5YFFQL0ODSXAOkNtXTToq
+$simplifyPublicKey 	= 'YOUR_SIMPLIFY_PUBLIC_API_KEY';	//E.g.: sbpb_M2M0ZTk2Y2ItNTcxMi00Y2QxLWJmNTctNzg4ZjEzMGMzY2Nj
 ?>
 ```
 
@@ -60,4 +62,14 @@ $merchant->products[] = new Product('One Tiny Cake',
 	350); //$3.50
 
 $merchant->shippingToStates = array('AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY');
+
+// flag to enable Simplify hosted payments : https://www.simplify.com/commerce/docs/tools/hosted-payments
+$merchant->enableHostedPayments = true;
+
 ```
+
+### Testing
+
+To test the checkout flow you can use the test cards detailed here - [https://www.simplify.com/commerce/docs/tools/hosted-payments#testing](https://www.simplify.com/commerce/docs/tools/hosted-payments#testing)
+
+Details on the Simplify API can be found here - [https://www.simplify.com/commerce/docs/api/index](https://www.simplify.com/commerce/docs/api/index)

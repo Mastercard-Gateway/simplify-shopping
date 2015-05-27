@@ -134,7 +134,7 @@ $_SESSION['totalAmount'] = $totalAmount;
             </div>
             <div class="row-fluid">
               <div class="span4 field-title text-right">Card Number</div>
-              <div class="span6"><input id="pan" name="pan" class="span12" type="text" maxlength="19" placeholder="e.g. 5555555555554444" pattern="[0-9]*" autocomplete="off"/></div>
+              <div class="span6"><input id="pan" name="pan" class="span12" type="text" maxlength="19" placeholder="e.g. 5555555555554444" pattern="[0-9 ]+" autocomplete="off"/></div>
             </div>
             <div class="row-fluid">
               <div class="span4 field-title text-right">Exp Date &amp; CVC</div>
@@ -200,10 +200,12 @@ $_SESSION['totalAmount'] = $totalAmount;
   <!-- javascript -->
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script type="text/javascript" src="https://www.simplify.com/commerce/v1/simplify.js"></script>
+  <script type="text/javascript" src="https://www.simplify.com/commerce/simplify.form.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
   <script src="assets/js/validation.js"></script>
   <script type="text/javascript">
     function simplifyResponseHandler(data) {
+      
       var $paymentForm = $("#checkout_form");
       // Remove all previous errors
       $(".error").remove();
@@ -237,6 +239,9 @@ $_SESSION['totalAmount'] = $totalAmount;
       $("#cvc").keydown(digitsOnly);
       $("#pan").keydown(digitsOnly);
       $("#zip").keydown(digitsOnly);
+
+      // formatCardNumber : simplify.form.js
+      $("#pan").formatCardNumber();
 
       $("input#name_on_card").blur(function() {nameValidator(this, this.value);});
       $("input#pan").blur(function() {creditCardValidator(this, this.value);});

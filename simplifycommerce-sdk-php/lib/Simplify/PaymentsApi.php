@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2015 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -44,11 +44,11 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    static public function createObject($object, $publicKey = null, $privateKey = null)
+    static public function createObject($object, $authentication = null)
     {
         $paymentsApi = new Simplify_PaymentsApi();
 
-        $jsonObject = $paymentsApi->execute("create", $object, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->execute("create", $object, $authentication);
 
         $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
@@ -58,11 +58,11 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    static public function findObject($object, $publicKey = null, $privateKey = null)
+    static public function findObject($object, $authentication = null)
     {
         $paymentsApi = new Simplify_PaymentsApi();
 
-        $jsonObject = $paymentsApi->execute("show", $object, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->execute("show", $object, $authentication);
         $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
         return $o;
@@ -71,10 +71,10 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    static public function updateObject($object, $publicKey = null, $privateKey = null) {
+    static public function updateObject($object, $authentication = null) {
         $paymentsApi = new Simplify_PaymentsApi();
 
-        $jsonObject = $paymentsApi->execute("update", $object, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->execute("update", $object, $authentication);
         $o = $paymentsApi->convertFromHashToObject($jsonObject, $object->getClazz());
 
         return $o;
@@ -83,10 +83,10 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    static public function deleteObject($object, $publicKey = null, $privateKey = null) {
+    static public function deleteObject($object, $authentication = null) {
         $paymentsApi = new Simplify_PaymentsApi();
 
-        $jsonObject = $paymentsApi->execute("delete", $object, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->execute("delete", $object, $authentication);
 
         return $jsonObject;
     }
@@ -94,7 +94,7 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    static public function listObject($object, $criteria = null, $publicKey = null, $privateKey = null) {
+    static public function listObject($object, $criteria = null, $authentication =null) {
         if ($criteria != null) {
             if (isset($criteria['max'])) {
                 $object->max = $criteria['max'];
@@ -111,7 +111,7 @@ class Simplify_PaymentsApi
         }
 
         $paymentsApi = new Simplify_PaymentsApi();
-        $jsonObject = $paymentsApi->execute("list", $object, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->execute("list", $object, $authentication);
 
         $ret = new Simplify_ResourceList();
         if (array_key_exists('list', $jsonObject) & is_array($jsonObject['list'])) {
@@ -207,38 +207,22 @@ class Simplify_PaymentsApi
     /**
      * @ignore
      */
-    public function execute($action, $object, $publicKey = null, $privateKey = null)
+    private function execute($action, $object, $authentication)
     {
         $http = new Simplify_HTTP();
 
-        if ($publicKey == null) {
-            $publicKey = Simplify::$publicKey;
-        }
-
-        if ($privateKey == null) {
-            $privateKey = Simplify::$privateKey;
-        }
-
-        return $http->request($this->getUrl($publicKey, $action, $object), $this->getMethod($action),
-                              $publicKey, $privateKey, json_encode($object->getProperties()));
+        return $http->apiRequest($this->getUrl($authentication->publicKey, $action, $object), $this->getMethod($action),
+            $authentication, json_encode($object->getProperties()));
     }
 
     /**
      * @ignore
      */
-    public function jwsDecode($hash, $publicKey = null, $privateKey = null)
+    public function jwsDecode($hash, $authentication)
     {
         $http = new Simplify_HTTP();
 
-        if ($publicKey == null) {
-            $publicKey = Simplify::$publicKey;
-        }
-
-        if ($privateKey == null) {
-            $privateKey = Simplify::$privateKey;
-        }
-        
-        $data = $http->jwsDecode($publicKey, $privateKey, $hash);
+        $data = $http->jwsDecode($authentication, $hash);
 
         return json_decode($data, true);
     }
@@ -267,6 +251,39 @@ class Simplify_PaymentsApi
     private function endsWith($s, $c)
     {
         return substr($s, -strlen($c)) == $c;
+    }
+
+    /**
+     * Helper function to build the Authentication object for backwards compatibility.
+     * An array of all the arguments passed to one of the API functions is checked against what
+     * we expect to received.  If it's greater, then we're assuming that the user is using the older way of
+     * passing the keys. i.e as two separate strings.  We take those two string and create the Authentication object
+     *
+     * @ignore
+     * @param $authentication
+     * @param $args
+     * @param $expectedArgCount
+     * @return Simplify_Authentication
+     */
+    static function buildAuthenticationObject($authentication = null, $args, $expectedArgCount){
+
+        if(sizeof($args) > $expectedArgCount) {
+            $authentication = new Simplify_Authentication($args[$expectedArgCount-1], $args[$expectedArgCount]);
+        }
+
+        if ($authentication == null){
+            $authentication = new Simplify_Authentication();
+        }
+
+        // check that the keys have been set, if not use the global keys
+        if ( empty($authentication->publicKey)){
+            $authentication->publicKey = Simplify::$publicKey;
+        }
+        if ( empty($authentication->privateKey)){
+            $authentication->privateKey = Simplify::$privateKey;
+        }
+
+        return $authentication;
     }
 
 }

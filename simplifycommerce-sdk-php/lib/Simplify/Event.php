@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2015 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -29,21 +29,24 @@
 
 class Simplify_Event extends Simplify_Object {
 
-
     /**
      * Creates an Event object
      * @param     array $hash A map of parameters; valid keys are:
      *     <dt><code>paylod</code></dt>    <dd>The raw JWS payload. </dd> <strong>required</strong>
      *     <dt><code>url</code></dt>    <dd>The URL for the webhook.  If present it must match the URL registered for the webhook.</dd>
-     * @param     string $publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-     * @param     string $privateKey Private key. If null, the value of static Simplify::$privateKey will be used
-     * @return    Payments_Event an Event object.
+     * @param  $authentication Object that contains the API public and private keys.  If null the values of the static
+     *         Simplify::$publicKey and Simplify::$privateKey will be used.
+     * @return Payments_Event an Event object.
+     * @throws InvalidArgumentException
      */
-    static public function createEvent($hash, $publicKey = null, $privateKey = null) {
+    static public function createEvent($hash, $authentication = null) {
+
+        $args = func_get_args();
+        $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
         $paymentsApi = new Simplify_PaymentsApi();
 
-        $jsonObject = $paymentsApi->jwsDecode($hash, $publicKey, $privateKey);
+        $jsonObject = $paymentsApi->jwsDecode($hash, $authentication);
 
         if ($jsonObject['event'] == null) {
             throw new InvalidArgumentException("Incorect data in webhook event");

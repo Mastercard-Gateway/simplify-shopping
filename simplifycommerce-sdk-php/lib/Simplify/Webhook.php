@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2015 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -32,16 +32,18 @@ class Simplify_Webhook extends Simplify_Object {
      * Creates an Simplify_Webhook object
      * @param     array $hash a map of parameters; valid keys are:<dl style="padding-left:10px;">
      *     <dt><tt>url</tt></dt>    <dd>Endpoint URL <strong>required </strong></dd></dl>
-     * @param     string publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-     * @param     string privateKey Private key. If null, the value of static Simplify::$privateKey will be used
+     * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.<i/>
      * @return    Webhook a Webhook object.
      */
-    static public function createWebhook($hash, $publicKey = null, $privateKey = null) {
+    static public function createWebhook($hash, $authentication = null) {
+
+        $args = func_get_args();
+        $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
 
         $instance = new Simplify_Webhook();
         $instance->setAll($hash);
 
-        $object = Simplify_PaymentsApi::createObject($instance, $publicKey, $privateKey);
+        $object = Simplify_PaymentsApi::createObject($instance, $authentication);
         return $object;
     }
 
@@ -51,11 +53,14 @@ class Simplify_Webhook extends Simplify_Object {
        /**
         * Deletes an Simplify_Webhook object.
         *
-        * @param     string publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-        * @param     string privateKey Private key. If null, the value of Simplify::$privateKey will be used
+        * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
         */
-        public function deleteWebhook($publicKey = null, $privateKey = null) {
-            $obj = Simplify_PaymentsApi::deleteObject($this, $publicKey, $privateKey);
+        public function deleteWebhook($authentication = null) {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 1);
+
+            $obj = Simplify_PaymentsApi::deleteObject($this, $authentication);
             $this->properties = null;
             return true;
         }
@@ -65,18 +70,21 @@ class Simplify_Webhook extends Simplify_Object {
         * Retrieve Simplify_Webhook objects.
         * @param     array criteria a map of parameters; valid keys are:<dl style="padding-left:10px;">
         *     <dt><tt>filter</tt></dt>    <dd>Filters to apply to the list.  </dd>
-        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return.  <strong>default:20</strong></dd>
-        *     <dt><tt>offset</tt></dt>    <dd>Used in paging of the list.  This is the start offset of the page.  <strong>default:0</strong></dd>
+        *     <dt><tt>max</tt></dt>    <dd>Allows up to a max of 50 list items to return. [min value: 0, max value: 50, default: 20]  </dd>
+        *     <dt><tt>offset</tt></dt>    <dd>Used in paging of the list.  This is the start offset of the page. [min value: 0, default: 0]  </dd>
         *     <dt><tt>sorting</tt></dt>    <dd>Allows for ascending or descending sorting of the list.  The value maps properties to the sort direction (either <tt>asc</tt> for ascending or <tt>desc</tt> for descending).  Sortable properties are: <tt> dateCreated</tt>.</dd></dl>
-        * @param     string publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-        * @param     string privateKey Private key. If null, the value of Simplify::$privateKey will be used
+        * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
         * @return    ResourceList a ResourceList object that holds the list of Webhook objects and the total
         *            number of Webhook objects available for the given criteria.
         * @see       ResourceList
         */
-        static public function listWebhook($criteria = null, $publicKey = null, $privateKey = null) {
+        static public function listWebhook($criteria = null, $authentication = null) {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
+
             $val = new Simplify_Webhook();
-            $list = Simplify_PaymentsApi::listObject($val, $criteria, $publicKey, $privateKey);
+            $list = Simplify_PaymentsApi::listObject($val, $criteria, $authentication);
 
             return $list;
         }
@@ -86,15 +94,18 @@ class Simplify_Webhook extends Simplify_Object {
          * Retrieve a Simplify_Webhook object from the API
          *
          * @param     string id  the id of the Webhook object to retrieve
-         * @param     string publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-         * @param     string privateKey Private key. If null, the value of Simplify::$privateKey will be used
+         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
          * @return    Webhook a Webhook object
          */
-        static public function findWebhook($id, $publicKey = null, $privateKey = null) {
+        static public function findWebhook($id, $authentication = null) {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 2);
+
             $val = new Simplify_Webhook();
             $val->id = $id;
 
-            $obj = Simplify_PaymentsApi::findObject($val, $publicKey, $privateKey);
+            $obj = Simplify_PaymentsApi::findObject($val, $authentication);
 
             return $obj;
         }
@@ -104,17 +115,17 @@ class Simplify_Webhook extends Simplify_Object {
          * Updates an Simplify_Webhook object.
          *
          * The properties that can be updated:
-         * <ul>
-         * 
-         * 
-         * <li>url <strong>(required)</strong></li>
-         * </ul>
-         * @param     string publicKey Public key. If null, the value of static Simplify::$publicKey will be used
-         * @param     string privateKey Private key. If null, the value of Simplify::$privateKey will be used
+         * <dl style="padding-left:10px;">
+         *     <dt><tt>url</tt></dt>    <dd>Endpoint URL <strong>required </strong></dd></dl>
+         * @param     $authentication -  information used for the API call.  If no value is passed the global keys Simplify::public_key and Simplify::private_key are used.  <i>For backwards compatibility the public and private keys may be passed instead of the authentication object.</i>
          * @return    Webhook a Webhook object.
          */
-        public function updateWebhook($publicKey = null, $privateKey = null)  {
-            $object = Simplify_PaymentsApi::updateObject($this, $publicKey, $privateKey);
+        public function updateWebhook($authentication = null)  {
+
+            $args = func_get_args();
+            $authentication = Simplify_PaymentsApi::buildAuthenticationObject($authentication, $args, 1);
+
+            $object = Simplify_PaymentsApi::updateObject($this, $authentication);
             return $object;
         }
 

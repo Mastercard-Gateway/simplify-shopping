@@ -52,7 +52,7 @@
   Version
   -------
 
-  This is version 1.0.1 of the SDK.  See CHANGES.txt for a list 
+  This is version 1.2.0 of the SDK.  See CHANGES.txt for a list 
   of changes. For an up-to-date version check at 
   https://www.simplify.com/commerce/docs/sdk/php.
 
@@ -76,6 +76,6 @@
   Copyright
   ---------
 
-  Copyright (c) 2013, MasterCard International Incorporated
+  Copyright (c) 2013 - 2015 MasterCard International Incorporated
   All rights reserved.
 

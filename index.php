@@ -85,7 +85,11 @@ require_once 'data/MerchantData.php';
 <body>
   <div class="bg-img size-header"><!--[if lt IE 9]><img class="bg-img" src="assets/img/bg_banner.jpg" /><![endif]--></div>
 
+<?php if ($merchant->enableHostedPayments) { ?>
+  <form id="order_form" action="hosted-checkout.php" method="POST">
+<?php } else { ?>
   <form id="order_form" action="checkout.php" method="POST">
+<?php } ?>
     <div class="container form-wrapper">
 
       <div class="container form-header-wrapper">

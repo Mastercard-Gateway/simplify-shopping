@@ -37,6 +37,8 @@ if (isset($_REQUEST['simplifyToken']) == false || isset($_SESSION['totalAmount']
 } 
 
 $simplifyToken = $_REQUEST['simplifyToken'];
+$customerName = $_REQUEST['customerName'];
+$customerEmail = $_REQUEST['customerEmail'];
 $totalAmount = $_SESSION['totalAmount'];
 $orders = $_SESSION['orders'];
 //Getting shipping address
@@ -58,16 +60,41 @@ try {
 	Simplify::$publicKey = $simplifyPublicKey;
 	Simplify::$privateKey = $simplifyPrivateKey;
 
-	$payment = Simplify_Payment::createPayment(array(
-		'amount' => $totalAmount,
-		'token' => $simplifyToken,
-		'description' => $description,
-		'currency' => 'USD'
+	// if the save card details flag is set 
+	if ($_REQUEST['saveCardDetails'] == true && isset($customerName) == true && isset($customerEmail) == true) {
+
+		// create a customer
+		$customer = Simplify_Customer::createCustomer(array(
+			'token' => $simplifyToken,
+			'email' => $customerEmail,
+			'name' => $customerName,
+			'reference' => 'Simplify Cake customer'
 		));
+
+		// make a payment with the customer
+		$payment = Simplify_Payment::createPayment(array(
+			'amount' => $totalAmount,
+			'description' => $description,
+			'currency' => 'USD',
+			'customer' => $customer->id
+		));
+
+	} else {
+
+		// make a payment with a card token
+		$payment = Simplify_Payment::createPayment(array(
+			'amount' => $totalAmount,
+			'token' => $simplifyToken,
+			'description' => $description,
+			'currency' => 'USD'
+		));
+	}
 }
 catch (Exception $e) {
 	//Something wrong
 	//Error handling needed
+
+	//echo $e;
 }
 
 ?>
@@ -137,6 +164,7 @@ catch (Exception $e) {
 
 		<div class="container form-body-wrapper">
 			<div class="container form-body">
+			
 				<?php if($payment->paymentStatus == 'APPROVED') { ?>
 				<h3>Order #<?php echo $payment->id ?></h3>
 				<div class="container-fluid receipt-wrapper">
@@ -182,6 +210,7 @@ catch (Exception $e) {
 
 
 	<!-- javascript -->
+
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 </body>

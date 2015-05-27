@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2013, MasterCard International Incorporated
+ * Copyright (c) 2013 - 2015 MasterCard International Incorporated
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are 
@@ -175,7 +175,6 @@ class Simplify_BadRequestException extends Simplify_ApiException {
      * @return boolean true if there are field errors; false otherwise.
      */
     function hasFieldErrors() {
-        return true;
         return count($this->fieldErrors) > 0;
     }
 
