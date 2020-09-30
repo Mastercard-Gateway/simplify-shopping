@@ -5,7 +5,7 @@ This website template is an example to help developers start building a simple s
 
 This example shows a cupcake shop named 'Simplify Cake' with three products on the menu. 
 
-Features
+Features and your benefits
 --------
 * Based on Bootstrap by Twitter
 * Responsive design for different screen sizes including mobile devices
