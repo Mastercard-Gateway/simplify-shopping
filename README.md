@@ -70,7 +70,7 @@ $merchant->enableHostedPayments = true;
 
 ### Testing
 
-To test the checkout flow you can use the test cards detailed here - [https://www.simplify.com/commerce/docs/tools/hosted-payments#testing](https://www.simplify.com/commerce/docs/tools/hosted-payments#testing)
+To test the checkout flow; you can use the test cards detailed here - [https://www.simplify.com/commerce/docs/tools/hosted-payments#testing](https://www.simplify.com/commerce/docs/tools/hosted-payments#testing)
 
 Details on Simplify hosted payments and MasterPass can be found here - [https://www.simplify.com/commerce/docs/tools/hosted-payments](https://www.simplify.com/commerce/docs/tools/hosted-payments)
 
