@@ -1,7 +1,7 @@
 Simplify Shopping Website Template
 ==================================
 
-This website template is an example to help developers start building a simple shopping website using Simplify Commerce by MasterCard to accept payments.
+This Website Template is an example to help developers start building a simple Shopping Website using Simplify Commerce by MasterCard to accept payments.
 
 This example shows a cupcake shop named 'Simplify Cake' with three products on the menu. 
 
